@@ -59,7 +59,11 @@ class RAGPipeline:
             # Use OpenRouter with proper client initialization
             self.client = OpenAI(
                 api_key=os.getenv("OPENROUTER_API_KEY"),
-                base_url="https://openrouter.ai/api/v1"
+                base_url="https://openrouter.ai/api/v1",
+                default_headers={
+                    "HTTP-Referer": "https://github.com/Luciano-Grana/techcorp-policy-qa",
+                    "X-Title": "TechCorp Policy Q&A"
+                }
             )
             print("Using OpenRouter API")
         else:
