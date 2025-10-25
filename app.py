@@ -19,12 +19,17 @@ app = Flask(__name__)
 # Initialize RAG components
 vector_store = None
 rag_pipeline = None
+initialization_done = False
 
 
 def initialize_rag():
     """Initialize or load the RAG pipeline."""
-    global vector_store, rag_pipeline
+    global vector_store, rag_pipeline, initialization_done
 
+    if initialization_done:
+        return
+
+    print("Starting RAG initialization...")
     vector_store = VectorStore(persist_directory="chroma_db")
 
     # Check if vector store is empty
@@ -51,10 +56,14 @@ def initialize_rag():
     )
 
     print("RAG pipeline initialized")
+    initialization_done = True
 
 
-# Initialize on startup
-initialize_rag()
+# Lazy initialization - only initialize when needed
+def ensure_initialized():
+    """Ensure RAG pipeline is initialized before use."""
+    if not initialization_done:
+        initialize_rag()
 
 
 @app.route('/')
@@ -67,6 +76,7 @@ def index():
 def health():
     """Health check endpoint."""
     try:
+        ensure_initialized()
         stats = vector_store.get_stats()
         return jsonify({
             "status": "healthy",
@@ -104,6 +114,8 @@ def chat():
     start_time = time.time()
 
     try:
+        ensure_initialized()
+
         # Get question from request
         data = request.get_json()
 
@@ -158,6 +170,8 @@ def search():
     }
     """
     try:
+        ensure_initialized()
+
         data = request.get_json()
 
         if not data or 'query' not in data:
@@ -200,6 +214,7 @@ def search():
 def stats():
     """Get vector store statistics."""
     try:
+        ensure_initialized()
         stats = vector_store.get_stats()
         return jsonify(stats), 200
     except Exception as e:
