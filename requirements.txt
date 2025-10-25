@@ -1,0 +1,32 @@
+# Core dependencies
+flask==3.0.0
+python-dotenv==1.0.0
+
+# RAG & LLM
+langchain==0.1.0
+langchain-community==0.0.10
+openai>=2.0.0
+
+# Vector DB - using newer version that fixes macOS build issues
+chromadb>=0.4.24
+
+# Document processing
+pypdf==3.17.4
+markdown==3.5.1
+beautifulsoup4==4.12.2
+lxml
+
+# Embeddings (free tier options)
+sentence-transformers>=2.2.2
+cohere>=4.37
+
+# Evaluation
+numpy>=1.24.0
+pandas>=2.0.0
+
+# Testing
+pytest==7.4.3
+requests==2.31.0
+
+# Deployment
+gunicorn==21.2.0
