@@ -1,5 +1,6 @@
 name: CI/CD Pipeline
 
+# Triggers on push to main/develop and PRs to main
 on:
   push:
     branches: [ main, develop ]
