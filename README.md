@@ -1,5 +1,9 @@
 # TechCorp Policy Q&A Assistant
 
+![CI/CD](https://github.com/Luciano-Grana/techcorp-policy-qa/actions/workflows/ci-cd.yml/badge.svg)
+![Python](https://img.shields.io/badge/python-3.10-blue.svg)
+![License](https://img.shields.io/badge/license-Educational-green.svg)
+
 A Retrieval-Augmented Generation (RAG) application for answering questions about company policies using LLMs and vector search.
 
 **🚀 Live Demo**: https://web-production-19d49a.up.railway.app
