@@ -134,10 +134,11 @@ Quantic-AI-Project/
 ├── .env.example               # Environment variables template
 ├── Procfile                   # Deployment configuration
 ├── README.md                  # This file
-├── DESIGN.md                  # Architecture and design decisions
-├── QUICKSTART.md              # Quick start guide
-├── DEPLOYMENT.md              # Deployment guide
-└── PROJECT_SUMMARY.md         # Project overview
+└── docs/                      # Documentation
+    ├── DESIGN.md              # Architecture and design decisions
+    ├── QUICKSTART.md          # Quick start guide
+    ├── DEPLOYMENT.md          # Deployment guide
+    └── PROJECT_SUMMARY.md     # Project overview
 ```
 
 ## API Endpoints

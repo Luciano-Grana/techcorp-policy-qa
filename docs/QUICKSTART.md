@@ -237,9 +237,9 @@ python app.py
 
 ## Learn More
 
-- [README.md](README.md) - Full documentation
+- [README.md](../README.md) - Full documentation
 - [DESIGN.md](DESIGN.md) - Architecture & design decisions
-- [evaluation_results/](evaluation_results/) - Evaluation metrics
+- [evaluation_results/](../evaluation_results/) - Evaluation metrics
 
 ## Support
 
