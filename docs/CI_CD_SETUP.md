@@ -67,11 +67,27 @@ Railway automatically deploys from GitHub without requiring additional GitHub Ac
 
 **How it works**:
 1. You push code to `main` branch
-2. GitHub Actions runs tests
-3. If tests pass, Railway detects the push
-4. Railway automatically rebuilds and deploys
+2. GitHub Actions runs tests (~2-3 minutes)
+3. **Railway waits for CI to pass** ✅
+4. Once tests pass, Railway automatically rebuilds and deploys
+5. Your app goes live with verified code
 
 **No secrets required** - Railway uses OAuth with GitHub
+
+### Railway "Wait for CI" Setting
+
+**✅ ENABLED** - Railway waits for GitHub Actions to pass before deploying
+
+This prevents broken code from being deployed:
+- If tests fail → Railway does NOT deploy ❌
+- If tests pass → Railway deploys automatically ✅
+
+**To verify this setting**:
+1. Go to Railway Dashboard → Your Service
+2. Settings → GitHub
+3. "Wait for CI" should be **ON**
+
+This ensures only tested, working code reaches production.
 
 ### Optional: Railway Token (Advanced)
 
