@@ -34,10 +34,12 @@ jobs:
 
     - name: Verify imports (smoke test)
       run: |
-        python -c "import app; print('App imports successful')"
-        python -c "from src.document_processor import DocumentProcessor; print('DocumentProcessor imports successful')"
-        python -c "from src.embeddings import EmbeddingModel; print('EmbeddingModel imports successful')"
-        python -c "from src.vector_store import VectorStore; print('VectorStore imports successful')"
+        python -c "import app; print('✓ App imports successful')"
+        python -c "from src.document_processor import DocumentProcessor; print('✓ DocumentProcessor imports successful')"
+        python -c "from src.embeddings import EmbeddingModel; print('✓ EmbeddingModel imports successful')"
+        python -c "from src.vector_store import VectorStore; print('✓ VectorStore imports successful')"
+        python -c "from src.rag_pipeline import RAGPipeline; print('✓ RAGPipeline imports successful')"
+        python -c "from src.evaluation import Evaluator; print('✓ Evaluator imports successful')"
 
     - name: Run tests (if available)
       run: |
@@ -63,15 +65,21 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Deploy to Render
-      if: ${{ secrets.RENDER_DEPLOY_HOOK_URL != '' }}
+    - name: Deploy to Railway
+      env:
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
       run: |
-        curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+        if [ -n "$RAILWAY_TOKEN" ]; then
+          echo "Triggering Railway deployment..."
+          # Railway auto-deploys from GitHub, this just confirms the push
+          echo "✓ Code pushed to main - Railway will auto-deploy"
+        else
+          echo "⚠️  RAILWAY_TOKEN not set - skipping deployment trigger"
+          echo "Railway will still auto-deploy from GitHub push"
+        fi
 
-    # Alternative: Deploy to Railway
-    # - name: Deploy to Railway
-    #   if: ${{ secrets.RAILWAY_TOKEN != '' }}
-    #   uses: bervProject/railway-deploy@main
-    #   with:
-    #     railway_token: ${{ secrets.RAILWAY_TOKEN }}
-    #     service: ${{ secrets.RAILWAY_SERVICE_NAME }}
+    # Alternative: Deploy to Render (uncomment if using Render instead)
+    # - name: Deploy to Render
+    #   if: ${{ secrets.RENDER_DEPLOY_HOOK_URL != '' }}
+    #   run: |
+    #     curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
