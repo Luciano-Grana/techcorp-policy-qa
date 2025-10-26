@@ -2,8 +2,11 @@
 
 **Student**: Luciano Grana
 **Course**: Master of Science in Software Engineering - AI Engineering
+**Institution**: Quantic School of Business and Technology
 **Project Type**: RAG (Retrieval-Augmented Generation) Application
-**Completion Date**: January 2025
+**Completion Date**: October 2025
+**Live Demo**: https://web-production-19d49a.up.railway.app
+**GitHub**: https://github.com/Luciano-Grana/techcorp-policy-qa
 
 ---
 
@@ -41,10 +44,10 @@ User → Flask Web App → RAG Pipeline → Vector Store (ChromaDB)
 | **Documents** | Markdown | Easy to author, parse, version control |
 | **Embedding** | sentence-transformers (MiniLM-L6) | Free, local, fast (384 dims) |
 | **Vector DB** | ChromaDB | Free, persistent, simple API |
-| **LLM** | OpenAI GPT-3.5-turbo | Good quality/speed/cost balance |
+| **LLM** | GPT-3.5 Turbo (via OpenRouter) | Excellent quality, ~$0.001/question |
 | **Web Framework** | Flask | Simple, sufficient for API endpoints |
 | **Frontend** | HTML/CSS/JavaScript | Minimal, no dependencies |
-| **Deployment** | Render/Railway | Free tier available |
+| **Deployment** | Railway | Pay-as-you-go (~$2-5/month) |
 | **CI/CD** | GitHub Actions | Free, GitHub integrated |
 
 ### Key Design Decisions
