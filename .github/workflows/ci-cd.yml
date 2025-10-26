@@ -1,11 +1,10 @@
 name: CI/CD Pipeline
 
-# Triggers on push to main/develop and PRs to main
+# Triggers on push to develop branch
+# After tests pass, automatically merges to main
 on:
   push:
-    branches: [ main, develop ]
-  pull_request:
-    branches: [ main ]
+    branches: [ develop ]
 
 jobs:
   build-and-test:
@@ -57,6 +56,28 @@ jobs:
         black --check src/ app.py || echo "Code formatting check completed"
       continue-on-error: true
 
-  # Railway deployment happens automatically after CI passes
-  # Railway's "Wait for CI" feature monitors the build-and-test job
-  # No explicit deploy step needed - Railway will deploy when checks pass
+  merge-to-main:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop'
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Configure Git
+      run: |
+        git config user.name "GitHub Actions"
+        git config user.email "actions@github.com"
+
+    - name: Merge to main
+      run: |
+        echo "✅ All tests passed! Merging develop to main..."
+        git checkout main
+        git pull origin main
+        git merge origin/develop --no-ff -m "chore: Auto-merge develop to main after CI success [skip ci]"
+        git push origin main
+        echo "✓ Successfully merged to main - Railway will now deploy"
