@@ -1,0 +1,19 @@
+# Render Blueprint for TechCorp Policy Q&A
+
+services:
+  - type: web
+    name: techcorp-policy-qa
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --timeout 120 --workers 1 --worker-class sync --max-requests 1000 --max-requests-jitter 50 --preload
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.12
+      - key: FLASK_DEBUG
+        value: False
+      - key: TOKENIZERS_PARALLELISM
+        value: false
+      - key: OMP_NUM_THREADS
+        value: "1"
+      - key: MKL_NUM_THREADS
+        value: "1"

@@ -19,7 +19,10 @@ class EmbeddingModel:
                        Default is a good free model with 384 dimensions
         """
         self.model_name = model_name
-        self.model = SentenceTransformer(model_name)
+        # Load model with memory optimization for low-RAM environments
+        self.model = SentenceTransformer(model_name, device='cpu')
+        # Reduce memory footprint
+        self.model.max_seq_length = 256  # Reduce from default 512
         self.embedding_dim = self.model.get_sentence_embedding_dimension()
 
     def embed_documents(self, texts: List[str]) -> List[List[float]]:
@@ -34,8 +37,9 @@ class EmbeddingModel:
         """
         embeddings = self.model.encode(
             texts,
-            show_progress_bar=True,
-            convert_to_numpy=True
+            show_progress_bar=False,  # Disable progress bar to save memory
+            convert_to_numpy=True,
+            batch_size=8  # Smaller batch size for low memory
         )
         return embeddings.tolist()
 
