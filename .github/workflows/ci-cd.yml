@@ -57,30 +57,6 @@ jobs:
         black --check src/ app.py || echo "Code formatting check completed"
       continue-on-error: true
 
-  deploy:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Deploy to Railway
-      env:
-        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-      run: |
-        if [ -n "$RAILWAY_TOKEN" ]; then
-          echo "Triggering Railway deployment..."
-          # Railway auto-deploys from GitHub, this just confirms the push
-          echo "✓ Code pushed to main - Railway will auto-deploy"
-        else
-          echo "⚠️  RAILWAY_TOKEN not set - skipping deployment trigger"
-          echo "Railway will still auto-deploy from GitHub push"
-        fi
-
-    # Alternative: Deploy to Render (uncomment if using Render instead)
-    # - name: Deploy to Render
-    #   if: ${{ secrets.RENDER_DEPLOY_HOOK_URL != '' }}
-    #   run: |
-    #     curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+  # Railway deployment happens automatically after CI passes
+  # Railway's "Wait for CI" feature monitors the build-and-test job
+  # No explicit deploy step needed - Railway will deploy when checks pass
