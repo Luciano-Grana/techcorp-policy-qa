@@ -2,9 +2,11 @@
 
 A Retrieval-Augmented Generation (RAG) application for answering questions about company policies using LLMs and vector search.
 
-**Live Demo**: [Your deployment URL here]
+**🚀 Live Demo**: https://web-production-19d49a.up.railway.app
 
 **Project for**: Master of Science in Software Engineering - AI Engineering Course
+**Institution**: Quantic School of Business and Technology
+**Author**: Luciano Grana
 
 ## Overview
 
@@ -19,18 +21,22 @@ This application provides an intelligent chatbot that answers questions about Te
 ## Features
 
 - Natural language Q&A over 8 company policy documents (~70 pages)
+- **LLM**: OpenAI GPT-3.5 Turbo (via OpenRouter API)
+- **Embeddings**: Sentence Transformers (all-MiniLM-L6-v2, 384 dimensions)
+- **Vector Store**: ChromaDB (persistent, local storage)
 - Source citation for all answers
 - Guardrails to refuse out-of-scope questions
-- Comprehensive evaluation framework
-- CI/CD pipeline with GitHub Actions
-- Production deployment on Render/Railway
+- Comprehensive evaluation framework with automated metrics
+- **Production Deployment**: Railway (pay-as-you-go hosting)
 
 ## Quick Start
 
 ### Prerequisites
 
 - Python 3.10+
-- OpenAI API key (or alternative: OpenRouter, Groq)
+- OpenRouter API key (for GPT-3.5 Turbo access)
+  - Sign up at https://openrouter.ai
+  - Add $5 credit (recommended)
 - Git
 
 ### Installation
@@ -57,9 +63,10 @@ This application provides an intelligent chatbot that answers questions about Te
    cp .env.example .env
    ```
 
-   Edit `.env` and add your API key:
+   Edit `.env` and add your OpenRouter API key:
    ```
-   OPENAI_API_KEY=your_api_key_here
+   OPENROUTER_API_KEY=your_openrouter_api_key_here
+   LLM_MODEL=openai/gpt-3.5-turbo
    ```
 
 ### Running Locally
@@ -303,17 +310,21 @@ cat evaluation_results/metrics.json
 - Similarity threshold of 0.3 filters low-quality results
 
 ### LLM Model
-**Choice**: GPT-3.5-turbo (default), configurable
+**Choice**: OpenAI GPT-3.5 Turbo (via OpenRouter API)
 
 **Justification**:
-- Good balance of quality, speed, and cost
+- Excellent balance of quality, speed, and cost (~$0.001 per question)
 - Fast inference (typically <2s for responses)
 - Strong instruction following for guardrails
-- Can be swapped for GPT-4, Claude, or open-source models
+- Reliable availability (no rate limiting with paid credits)
+- High quality answers with proper citations
 
-**Free alternatives**:
-- OpenRouter free tier models
-- Groq (llama-3.1-8b, mixtral)
+**Cost**: ~$0.001 per question via OpenRouter ($5 credit = ~5,000 questions)
+
+**Alternatives considered**:
+- Free tier models (DeepSeek, Llama): Rate limited and lower quality
+- GPT-4: Higher quality but 10x more expensive
+- Direct OpenAI API: More expensive than OpenRouter
 
 ### Prompt Design
 **Choice**: System prompt with explicit guardrails and citation requirements
@@ -334,47 +345,45 @@ cat evaluation_results/metrics.json
 
 ## Deployment
 
-### Deploy to Render
+**Production URL**: https://web-production-19d49a.up.railway.app
 
-1. **Create account** at [render.com](https://render.com)
+This application is deployed on **Railway** (pay-as-you-go hosting).
 
-2. **Create new Web Service**:
-   - Connect your GitHub repository
-   - Build command: `pip install -r requirements.txt`
-   - Start command: `gunicorn app:app`
+### Deploy to Railway (Recommended)
 
-3. **Add environment variables**:
-   - `OPENAI_API_KEY`: Your API key
-   - `PYTHON_VERSION`: 3.10.12
+Railway offers better RAM allocation than Render's free tier and pay-as-you-go pricing.
 
-4. **Set up deploy hook** (optional):
-   - Copy deploy hook URL from Render dashboard
-   - Add to GitHub secrets as `RENDER_DEPLOY_HOOK_URL`
+**See detailed guide**: [docs/DEPLOY_TO_RAILWAY.md](docs/DEPLOY_TO_RAILWAY.md)
 
-### Deploy to Railway
+**Quick steps**:
+1. Sign up at [railway.app](https://railway.app) with GitHub
+2. Deploy from GitHub repo → Select `techcorp-policy-qa`
+3. Add environment variables (see below)
+4. Railway auto-deploys on push to main
 
-1. **Create account** at [railway.app](https://railway.app)
-
-2. **Create new project**:
-   - Connect GitHub repository
-   - Railway auto-detects Python and uses Procfile
-
-3. **Add environment variables**:
-   - `OPENAI_API_KEY`: Your API key
-
-4. **Deploy**: Automatic on push to main branch
+**Cost**: ~$2-5/month (includes $5 free credits monthly)
 
 ### Environment Variables
 
-Required:
-- `OPENAI_API_KEY`: OpenAI API key (or alternative LLM provider)
+**Required**:
+- `OPENROUTER_API_KEY`: Your OpenRouter API key
+- `LLM_MODEL`: `openai/gpt-3.5-turbo`
+- `LLM_TEMPERATURE`: `0.1`
+- `LLM_MAX_TOKENS`: `500`
+- `RAG_TOP_K`: `5`
+- `FLASK_DEBUG`: `False`
+- `PYTHON_VERSION`: `3.10.12`
 
-Optional:
-- `LLM_MODEL`: Model name (default: gpt-3.5-turbo)
-- `LLM_TEMPERATURE`: Temperature 0-1 (default: 0.1)
-- `LLM_MAX_TOKENS`: Max response tokens (default: 500)
-- `RAG_TOP_K`: Number of chunks to retrieve (default: 5)
-- `PORT`: Server port (default: 5000)
+**Memory optimization** (for 512MB-1GB RAM environments):
+- `TOKENIZERS_PARALLELISM`: `false`
+- `OMP_NUM_THREADS`: `1`
+- `MKL_NUM_THREADS`: `1`
+
+### Alternative: Deploy to Render
+
+See [docs/DEPLOY_TO_RENDER.md](docs/DEPLOY_TO_RENDER.md) for Render deployment.
+
+**Note**: Render's free tier (512MB RAM) is insufficient for this app. Requires Starter tier ($7/month, 2GB RAM).
 
 ## CI/CD Pipeline
 
@@ -504,11 +513,14 @@ This project is for educational purposes as part of an AI Engineering course.
 ## Contact
 
 **Student**: Luciano Grana
-**Course**: Master of Science in Software Engineering
-**Institution**: [Your institution]
+**Course**: Master of Science in Software Engineering - AI Engineering
+**Institution**: Quantic School of Business and Technology
+**GitHub**: https://github.com/Luciano-Grana/techcorp-policy-qa
 
 ## Acknowledgments
 
 - Company policy templates inspired by real-world HR policies
-- Built with LangChain, ChromaDB, Flask, and OpenAI
-- Deployed on Render/Railway free tier
+- Built with **custom RAG pipeline** (no LangChain framework), ChromaDB, Flask, sentence-transformers
+- LLM: OpenAI GPT-3.5 Turbo via OpenRouter API
+- Deployed on Railway (pay-as-you-go hosting)
+- Memory optimizations for low-RAM environments
