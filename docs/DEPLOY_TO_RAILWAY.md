@@ -1,6 +1,14 @@
-# Deploy to Railway - Free Alternative
+# Deploy to Railway - Step-by-Step Guide
 
-Railway's free tier offers better RAM limits than Render (up to 1GB vs 512MB).
+Railway offers pay-as-you-go pricing with $5 free credits monthly. Better RAM limits than Render free tier.
+
+## Why Railway?
+
+✅ **Better free tier**: ~1GB RAM vs Render's 512MB
+✅ **Pay-as-you-go**: Only pay for what you use (~$2-5/month for this app)
+✅ **No sleep**: App stays running 24/7
+✅ **Automatic HTTPS**: Built-in SSL certificates
+✅ **Easy deployment**: Auto-detects Python apps
 
 ## Quick Setup (10 minutes)
 
@@ -16,23 +24,24 @@ Railway's free tier offers better RAM limits than Render (up to 1GB vs 512MB).
 
 ### Step 3: Configure Environment Variables
 
-Railway will auto-detect your Python app. Add these variables:
+Railway will auto-detect your Python app. Click "Variables" tab and add:
 
-Click "Variables" tab and add:
+**CRITICAL - Add these EXACT values:**
 
-```
-OPENROUTER_API_KEY=your_new_api_key_here
-LLM_MODEL=openai/gpt-3.5-turbo
-LLM_TEMPERATURE=0.1
-LLM_MAX_TOKENS=500
-RAG_TOP_K=5
-FLASK_DEBUG=False
-PYTHON_VERSION=3.10.12
-TOKENIZERS_PARALLELISM=false
-OMP_NUM_THREADS=1
-MKL_NUM_THREADS=1
-PORT=8080
-```
+| Variable Name | Value |
+|---------------|-------|
+| `OPENROUTER_API_KEY` | Your NEW OpenRouter API key (sk-or-v1-...) |
+| `LLM_MODEL` | `openai/gpt-3.5-turbo` |
+| `LLM_TEMPERATURE` | `0.1` |
+| `LLM_MAX_TOKENS` | `500` |
+| `RAG_TOP_K` | `5` |
+| `FLASK_DEBUG` | `False` |
+| `PYTHON_VERSION` | `3.10.12` |
+| `TOKENIZERS_PARALLELISM` | `false` |
+| `OMP_NUM_THREADS` | `1` |
+| `MKL_NUM_THREADS` | `1` |
+
+**Note**: Railway automatically sets `PORT`, so you don't need to add it.
 
 ### Step 4: Configure Build
 
